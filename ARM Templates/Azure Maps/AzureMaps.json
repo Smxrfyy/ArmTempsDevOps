@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accountName":{
+            "type": "string",
+            "defaultValue": "[uniqueString(resourceGroup().id)]",
+            "metadata": {
+                "description": "Dependant on the resource group that is selected for the paid service."
+            }
+        }, 
+        "pricingTier": { 
+            "type": "string", 
+            "allowedValues":[ 
+                "S0", 
+                "S1", 
+                "G2"
+            ], 
+            "defaultValue": "S1",
+            "metadata": { 
+                "description": "Selected S1 as it is a good middle ground between S0 and G2 in relation to price." 
+            } 
+        }, 
+        "kind": { 
+            "type": "string", 
+            "allowedValues":[ 
+                "Gen1", 
+                "Gen2" 
+            ], 
+            "defaultValue": "Gen1", 
+            "metadata": { 
+                "description": "Selected Gen1 to make the solution cost effective." 
+            } 
+        } 
+    }, 
+    "resources": [
+        {
+            "name": "[parameters('accountName')]",
+            "type": "Microsoft.Maps/accounts",
+            "apiVersion": "2021-02-01",
+            "location": "global",
+            "sku": {
+               "name": "[parameters('pricingTier')]"
+            }, 
+            "kind" : "[parameters('kind')]" 
+        }
+    ]
+}
